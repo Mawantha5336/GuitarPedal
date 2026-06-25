@@ -1,0 +1,5 @@
+*.o
+*.s
+build/
+WebMIDI/effects.js
+MIDI_CC_MAP.md

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RP2350 Pedal Controller</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    <header class="glass-panel app-header">
+      <h1 id="app-title" class="title-disconnected">RP2350 Pedal</h1>
+      <div class="header-controls">
+        <button id="tuner-btn" class="action-btn" title="Tuner Mode">🎵</button>
+        <label class="switch" title="Global Enable">
+          <input type="checkbox" id="global-enable">
+          <span class="slider round"></span>
+        </label>
+        <button id="burger-btn" class="action-btn" title="Menu">☰</button>
+      </div>
+    </header>
+
+    <!-- Tuner Panel -->
+    <div id="tuner-panel" class="glass-panel hidden">
+      <div class="tuner-header">
+        <h2>Tuner</h2>
+        <div style="display: flex; gap: 15px; align-items: center;">
+          <label style="color: var(--text-muted); display: flex; align-items: center; gap: 8px; cursor: pointer;">
+            <input type="checkbox" id="tuner-synth-toggle"> Play Tones
+          </label>
+          <button id="close-tuner-btn" class="action-btn" title="Exit Tuner">✕</button>
+        </div>
+      </div>
+      <div class="tuner-chromatic-display">
+        <div class="tuner-note" id="tuner-chromatic-note">--</div>
+        <div class="tuner-cents" id="tuner-chromatic-cents">0¢</div>
+        <div class="tuner-vol" id="tuner-chromatic-vol">V: 0</div>
+      </div>
+      <div class="tuner-meter-container">
+        <div class="tuner-meter-center"></div>
+        <div id="tuner-needle" class="tuner-needle"></div>
+      </div>
+      <div class="tuner-strings" id="tuner-poly-strings">
+        <!-- Strings dynamically added here -->
+      </div>
+    </div>
+
+    <main id="effects-container">
+      <!-- Effect cards populated dynamically -->
+    </main>
+
+    <!-- Panel Backdrop -->
+    <div id="panel-backdrop" class="hidden"></div>
+
+    <!-- Global Menu Panel -->
+    <div id="global-menu-panel" class="glass-panel bottom-panel hidden">
+      <div class="panel-header">
+        <h2>Global Settings</h2>
+        <button id="close-global-menu" class="action-btn" title="Close">✕</button>
+      </div>
+      <div class="panel-content menu-actions">
+        <div class="midi-selection" style="margin-bottom: 15px; text-align: left; padding: 10px; background: rgba(0,0,0,0.2); border-radius: 8px;">
+          <label style="display:block; margin-bottom: 5px; color: var(--text-muted); font-size: 0.9em;">MIDI Input Device</label>
+          <select id="midi-input-select" style="width: 100%; margin-bottom: 10px; background: #222; color: #fff; padding: 8px; border-radius: 5px; border: 1px solid rgba(255,255,255,0.2); font-family: inherit; font-size: 1em;"></select>
+          <label style="display:block; margin-bottom: 5px; color: var(--text-muted); font-size: 0.9em;">MIDI Output Device</label>
+          <select id="midi-output-select" style="width: 100%; background: #222; color: #fff; padding: 8px; border-radius: 5px; border: 1px solid rgba(255,255,255,0.2); font-family: inherit; font-size: 1em;"></select>
+        </div>
+        <button id="global-reset-btn" class="menu-btn">↺ Reset All to Defaults</button>
+        <button id="global-disable-btn" class="menu-btn">⏸ Disable All Effects</button>
+        <button id="global-save-btn" class="menu-btn">💾 Save All to EEPROM</button>
+        <button id="global-load-btn" class="menu-btn">📂 Load All from EEPROM</button>
+        <button id="update-app-btn" class="menu-btn">⬇️ Update App</button>
+        <button id="global-program-btn" class="menu-btn danger-btn">⚠️ Reboot to Programming Mode</button>
+      </div>
+    </div>
+
+    <!-- Active Effect Panel -->
+    <div id="active-effect-panel" class="glass-panel bottom-panel hidden">
+      <div class="panel-header">
+        <h2 id="active-effect-title">Effect Name</h2>
+        <button id="close-active-effect" class="action-btn" title="Close">✕</button>
+      </div>
+      <div class="panel-content menu-actions">
+        <button id="effect-reset-btn" class="menu-btn">↺ Reset to Defaults</button>
+        <button id="effect-save-btn" class="menu-btn">💾 Save to EEPROM</button>
+        <button id="effect-load-btn" class="menu-btn">📂 Load from EEPROM</button>
+      </div>
+    </div>
+
+    <!-- Active Pot Panel -->
+    <div id="active-pot-panel" class="glass-panel bottom-panel hidden">
+      <div class="panel-header">
+        <div class="active-pot-info">
+          <span id="active-pot-title">Effect - Pot</span>
+          <span id="active-pot-value" class="pot-value">0</span>
+        </div>
+        <button id="close-active-pot" class="action-btn" title="Close">✕</button>
+      </div>
+      <div class="active-pot-slider-container">
+        <input type="range" id="active-pot-slider" class="large-slider" min="0" max="120" value="60">
+      </div>
+    </div>
+
+  </div>
+
+  <script src="effects.js"></script>
+  <script src="app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./service-worker.js')
+          .then(registration => {
+            console.log('ServiceWorker registration successful');
+          })
+          .catch(err => {
+            console.log('ServiceWorker registration failed: ', err);
+          });
+      });
+    }
+  </script>
+</body>
+</html>
